@@ -15,7 +15,10 @@ void GetMenu(Perechen& ExampleComputer, bool exitFlag){
 		     "17. Сортировать перечень 3\n18. Сохранить перечни\n" <<
 		     "19. Поиск по цене\n20. Поиск по объему жесткого диска\n" <<
 		     "21. Поиск по названию марки, типу процессора ит.д.\n22. Сортировка результатов поиска\n" <<
-		     "23. Сохранение результатов поиска\n";
+		     "23. Сохранение результатов поиска\n24. Тестирование конструктора копирования для 1 класса\n"<< 
+		     "25. Тестирование оператора присваивания для 1 класса\n26. Тестирование конструктора копирования для 2 класса\n" << 
+		     "27. Тестирование оператора присваивания для 2 класса\n28. Тестирование конструктора копирования для 3 класса\n" << 
+		     "29. Тестирование оператора присваивания для 3 класса\n";
 
 	while (SwitchChoose == 1){
 		std::cout << "Введите пункт меню: ";
@@ -66,6 +69,12 @@ void GetMenu(Perechen& ExampleComputer, bool exitFlag){
 					}
 				}
 		case 23: ExampleComputer.SearchComp::OutputInFile(); break;
+		case 24: ExampleComputer.workComputers::testCopyConstructor(); break;
+		case 25: ExampleComputer.workComputers::testCopyOperator(); break;
+		case 26: ExampleComputer.SearchComp::testCopyConstructor(); break;
+		case 27: ExampleComputer.SearchComp::testCopyOperator(); break;
+		case 28: ExampleComputer.Perechen::testCopyConstructor(); break;
+		case 29: ExampleComputer.Perechen::testCopyOperator(); break;
 		default: exitFlag =false;
 	}
 	std::cout << "\nВведите 1 для повторного выбора пункта меню(без очистки экрана): ";

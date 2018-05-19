@@ -1,43 +1,48 @@
 #include "CompHeader.h"
 
-SearchComp::SearchComp(SearchComp& copy){
-	size= copy.size;
-	if (size == 0){
-		std::cout << "n != 0!!!! в конструкторе копирования";
-		exit(-1);
-	}
-	SearchResult = new RECORD[size];
-	if (SearchResult == NULL)
-	{
-		std::cout << "Нет места в конструкторе копирования";
-		exit(-1);
-	}
-	for (int i = 0; i < size; i++)
-		SearchResult[i] = copy.SearchResult[i];
+void swap(SearchComp& first, SearchComp& second){
+	std::swap(first.size, second.size);
+	std::swap(first.SearchResult, second.SearchResult);
 }
 
-SearchComp SearchComp::operator=(SearchComp& copy){
-	if (this == &copy){
-		return *this;
-	}
-	RECORD* MassRecordCopy = new RECORD[copy.size];
-	if (MassRecordCopy == NULL)
-	{
-		std::cout << "Не хватает места при иницииализации в операторе копирования\n";
-		exit(-1);
-	}	
-	for (int i = 0; i < copy.size; i++)
-	{
-		MassRecordCopy[i] = copy.SearchResult[i];
-	}
-	if (SearchResult != NULL)
-		delete [] SearchResult;
-	SearchResult = MassRecordCopy;	
-	size= copy.size;
-	MassRecordCopy = NULL;
+SearchComp::SearchComp(SearchComp& copy) : SearchComp(){
+	swap(*this, copy);
+}
+
+SearchComp& SearchComp::operator=(SearchComp copy){
+	if(&copy != this)
+		swap(*this, copy);
 	return *this;
 }
 
+void SearchComp::testCopyOperator(){
+	SearchComp eg;
+	std::cout << "введите первый массив:\n";
+	eg.InputFromFile();
+	eg.workComputers::showInfo();
+	eg.SearchPrice();
+	if (true){
+		SearchComp eg2;
+		std::cout << "введите второй массив:\n";
+		eg2.InputFromFile();
+		eg2.workComputers::showInfo();
+		eg2.SearchPrice();
+		eg = eg2;
+	}
+	std::cout << "очистка второго массива\n";
+	eg.showInfo();
+}
+
+void SearchComp::testCopyConstructor(){
+	SearchComp eg;
+	std::cout << "введите первый массив:\n";
+	eg.InputFromFile();
+	eg.workComputers::showInfo();
+	eg.SearchPrice();
+	SearchComp eg2(eg);
+	std::cout << "первый массив удален\n";
+	eg2.showInfo();
+}
 /*void SearchComp::swapElementsInVector(unsigned index){
 	RECORD temp = SearchResult[index];
 	SearchResult[index] = SearchResult[index - 1];
@@ -245,7 +250,7 @@ void SearchComp::SearchBrandTypeRamETC(){
 }
 */
 
-// вариант из 4 лабы
+// вариант из 2 лабы
 
 void SearchComp::SearchPrice(){
 	if (CapabilitiesComp == NULL)
@@ -258,9 +263,9 @@ void SearchComp::SearchPrice(){
 	std::cin >> BottomBorder;
 	std::cout << "Введите верхнюю границу цены(нестрогое): ";
 	std::cin >> TopBorder;
-	SearchComp SearchResult;
+//	SearchComp SearchResult;
 	std::vector<int> CollectIndexes; // Второй вариант со сбором индеков
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i < workComputers::size; i++)
 	{
 		if (BottomBorder <= CapabilitiesComp[i].CompCost && CapabilitiesComp[i].CompCost <= TopBorder)
 		{
@@ -275,17 +280,19 @@ void SearchComp::SearchPrice(){
 		std::cout << "Не найдено!\n";
 		return;
 	}
-	SearchResult.size= CollectIndexes.size();
-	std::cout << SearchResult.size<< " size\n";
-	SearchResult.CapabilitiesComp = new RECORD[SearchResult.size];
-	for (int i = 0; i < SearchResult.size; i++)
-		SearchResult.CapabilitiesComp[i] = CapabilitiesComp[CollectIndexes[i]];
-	SearchResult.SortProcTypeAndClock();
+	if (SearchResult != NULL)
+		delete [] SearchResult;
+	size = CollectIndexes.size();
+	std::cout << size<< " size\n";
+	SearchResult= new RECORD[size];
+	for (int i = 0; i < size; i++)
+		SearchResult[i] = CapabilitiesComp[CollectIndexes[i]];
+	SearchComp::SortProcTypeAndClock();
 	char ch;
 	std::cout << "Желаете сохранить результаты поиска в файл?(y/n)\n";
 	std::cin >> ch;
 	if (ch == 'y' || ch == 'Y')
-		SearchResult.OutputInFile();
+		SearchComp::OutputInFile();
 }
 
 
@@ -300,9 +307,8 @@ void SearchComp::SearchHddVolume(){
 	std::cin >> BottomBorder;
 	std::cout << "Введите верхнюю границу размера памяти(нестрогое): ";
 	std::cin >> TopBorder;
-	SearchComp SearchResult;
 	std::vector<int> CollectIndexes; // Второй вариант со сбором индеков
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i < workComputers::size; i++)
 	{
 		if (BottomBorder <= CapabilitiesComp[i].CompInfo.Storage && CapabilitiesComp[i].CompInfo.Storage <= TopBorder)
 			CollectIndexes.push_back(i);
@@ -312,17 +318,20 @@ void SearchComp::SearchHddVolume(){
 		std::cout << "Не найдено!\n";
 		return;
 	}
-	SearchResult.size= CollectIndexes.size();
-	std::cout << SearchResult.size<< " size\n";
-	SearchResult.CapabilitiesComp = new RECORD[SearchResult.size];
-	for (int i = 0; i < SearchResult.size; i++)
-		SearchResult.CapabilitiesComp[i] = CapabilitiesComp[CollectIndexes[i]];
-	SearchResult.SortRAM();
+	if (SearchResult != NULL)
+		delete [] SearchResult;
+	size = CollectIndexes.size();
+	std::cout << size<< " size\n";
+	SearchResult= new RECORD[size];
+
+	for (int i = 0; i < size; i++)
+		SearchResult[i] = CapabilitiesComp[CollectIndexes[i]];
+	SearchComp::SortRAM();
 	char ch;
 	std::cout << "Желаете сохранить результаты поиска в файл?(y/n)\n";
 	std::cin >> ch;
 	if (ch == 'y' || ch == 'Y')
-		SearchResult.OutputInFile();
+		SearchComp::OutputInFile();
 }
 
 void SearchComp::SearchBrandTypeRamETC(){
@@ -349,7 +358,6 @@ void SearchComp::SearchBrandTypeRamETC(){
 	std::cin >> BBVideo;
 	std::cout << "Введите верхнюю границу размера видеопамяти(нестрогое): ";
 	std::cin >> TBVideo;
-	SearchComp SearchResult;
 	std::vector<int> CollectIndexes; // Второй вариант со сбором индеков
 	for (int i = 0; i < size; i++)
 	{
@@ -364,16 +372,18 @@ void SearchComp::SearchBrandTypeRamETC(){
 		std::cout << "Не найдено!\n";
 		return;
 	}
-	SearchResult.size= CollectIndexes.size();
-	std::cout << SearchResult.size<< " size\n";
-	SearchResult.CapabilitiesComp = new RECORD[SearchResult.size];
-	for (int i = 0; i < SearchResult.size; i++)
-		SearchResult.CapabilitiesComp[i] = CapabilitiesComp[CollectIndexes[i]];
-	SearchResult.showInfo();
+	if (SearchResult != NULL)
+		delete [] SearchResult;
+	size = CollectIndexes.size();
+	std::cout << size<< " size\n";
+	SearchResult= new RECORD[size];
+
+	for (int i = 0; i < size; i++)
+		SearchResult[i] = CapabilitiesComp[CollectIndexes[i]];
+	SearchComp::showInfo();
 	char ch;
 	std::cout << "Желаете сохранить результаты поиска в файл?(y/n)\n";
 	std::cin >> ch;
 	if (ch == 'y' || ch == 'Y')
-		SearchResult.OutputInFile();
-
+		SearchComp::OutputInFile();
 }

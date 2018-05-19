@@ -1,62 +1,45 @@
 #include "CompHeader.h"
 
-workComputers::workComputers(workComputers& copy){
-	size= copy.size;
-	if (size == 0){
-		std::cout << "n != 0!!!! в конструкторе копирования";
-		exit(-1);
-	}
-	CapabilitiesComp = new RECORD[size];
-	if (CapabilitiesComp == NULL)
-	{
-		std::cout << "Нет места в конструкторе копирования";
-		exit(-1);
-	}
-	for (int i = 0; i < size; i++)
-		CapabilitiesComp[i] = copy.CapabilitiesComp[i];
+void swap(workComputers& first, workComputers& second){
+	std::swap(first.size, second.size);
+	std::swap(first.CapabilitiesComp, second.CapabilitiesComp);
+}
+workComputers::workComputers(workComputers& copy) : workComputers(){
+	swap(*this, copy);
 }
 
-workComputers workComputers::operator=(workComputers& copy){
-	if (this == &copy){
-		return *this;
-	}
-	RECORD* MassRecordCopy = new RECORD[copy.size];
-	if (MassRecordCopy == NULL)
-	{
-		std::cout << "Не хватает места при иницииализации в операторе копирования\n";
-		exit(-1);
-	}	
-	for (int i = 0; i < copy.size; i++)
-	{
-		MassRecordCopy[i] = copy.CapabilitiesComp[i];
-	}
-	if (CapabilitiesComp != NULL)
-		delete [] CapabilitiesComp;
-	CapabilitiesComp = MassRecordCopy;	
-	size= copy.size;
-	MassRecordCopy = NULL;
+workComputers& workComputers::operator=(workComputers copy){
+	if(&copy != this)
+		swap(*this, copy);
 	return *this;
 }
+//size(copy.size), CapabilitiesComp(size ? new RECORD[size] : nullptr){
 
 void workComputers::testCopyOperator(){
 	workComputers eg;
+	std::cout << "введите первый массив:\n";
 	eg.InputFromFile();
 	eg.showInfo();
 	if (true){
-		workComputers egNumber2;
-		egNumber2.InputFromFile();
-		egNumber2.showInfo();
-		eg = egNumber2;
+		workComputers eg2;
+		std::cout << "введите второй массив:\n";
+		eg2.InputFromFile();
+		eg2.showInfo();
+		eg = eg2;
 	}
+	std::cout << "очистка второго массива\n";
 	eg.showInfo();
 }
 
 void workComputers::testCopyConstructor(){
 	workComputers eg;
+	std::cout << "введите первый массив:\n";
 	eg.InputFromFile();
 	eg.showInfo();
-	workComputers egNumber2 = eg;
-	egNumber2.showInfo();
+	workComputers eg2(eg);
+	eg.workComputers::~workComputers();
+	std::cout << "первый массив удален\n";
+	eg2.showInfo();
 }
 
 void workComputers::InputFromFile(){
@@ -83,8 +66,6 @@ void workComputers::InputFromFile(){
 			ab.CompInfo.GraphicVolume >>
 			ab.CompInfo.RAM >> ab.CompInfo.Storage >> end;
 
-//		if (i == 0 && SizeOfMassive != 0)
-
 		CopyCapComp = new RECORD[i + 1];
 		for (int j = 0; j < i; j++)
 			if (CapabilitiesComp != NULL)
@@ -94,7 +75,6 @@ void workComputers::InputFromFile(){
 			delete [] CapabilitiesComp;
 		CapabilitiesComp = CopyCapComp;
 		CopyCapComp = NULL;
-		// доделай ввод	
 	}
 	size = ++i;
 }

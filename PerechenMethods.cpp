@@ -1,43 +1,68 @@
 #include "CompHeader.h"
 
-/*Perechen::Perechen(Perechen& copy){
-	size= copy.size;
-	if (size == 0){
-		std::cout << "n != 0!!!! в конструкторе копирования";
-		exit(-1);
-	}
-	SearchResult = new RECORD[size];
-	if (SearchResult == NULL)
-	{
-		std::cout << "Нет места в конструкторе копирования";
-		exit(-1);
-	}
-	for (int i = 0; i < size; i++)
-		SearchResult[i] = copy.SearchResult[i];
+// Должно копироваться три перечня!
+void swap(Perechen& first, Perechen& second){
+	std::swap(first.pBrandlen, second.pBrandlen);
+	std::swap(first.pProclen, second.pProclen);
+	std::swap(first.pVideolen, second.pVideolen);
+	std::swap(first.perechenBrands, second.perechenBrands);
+	std::swap(first.perechenProcTypes, second.perechenProcTypes);
+	std::swap(first.perechenVideocardVolume, second.perechenVideocardVolume);
 }
 
-SearchComp SearchComp::operator=(SearchComp& copy){
-	if (this == &copy){
-		return *this;
-	}
-	RECORD* MassRecordCopy = new RECORD[copy.size];
-	if (MassRecordCopy == NULL)
-	{
-		std::cout << "Не хватает места при иницииализации в операторе копирования\n";
-		exit(-1);
-	}	
-	for (int i = 0; i < copy.size; i++)
-	{
-		MassRecordCopy[i] = copy.SearchResult[i];
-	}
-	if (SearchResult != NULL)
-		delete [] SearchResult;
-	SearchResult = MassRecordCopy;	
-	size= copy.size;
-	MassRecordCopy = NULL;
+Perechen::Perechen(Perechen& copy) : Perechen(){
+	swap(*this, copy);	
+}
+
+Perechen& Perechen::operator=(Perechen copy){
+	if(&copy != this)
+		swap(*this, copy);
 	return *this;
 }
-*/
+
+void Perechen::testCopyOperator(){
+	Perechen eg;
+	std::cout << "введите первый массив:\n";
+	eg.InputFromFile();
+	eg.workComputers::showInfo();
+	makePerechen1(eg, eg);
+	makePerechen2(eg, eg);
+	makePerechen3(eg, eg);
+	eg.showFirstPerech();
+	eg.showSecondPerech();
+	eg.showThirdPerech();
+	if (true){
+		Perechen eg2;
+		std::cout << "введите второй массив:\n";
+		eg2.InputFromFile();
+		eg2.showInfo();
+		eg = eg2;
+	}
+	std::cout << "очистка второго массива\n";
+	eg.showFirstPerech();
+	eg.showSecondPerech();
+	eg.showThirdPerech();
+}
+
+void Perechen::testCopyConstructor(){
+	workComputers some;
+	Perechen eg;
+	std::cout << "введите первый массив:\n";
+	some.InputFromFile();
+	makePerechen1(some, eg);
+	makePerechen2(some, eg);
+	makePerechen3(some, eg);
+	eg.showFirstPerech();
+	eg.showSecondPerech();
+	eg.showThirdPerech();
+	Perechen eg2(eg);
+	eg.Perechen::~Perechen();
+	std::cout << "первый массив удален\n";
+	eg2.showFirstPerech();
+	eg2.showSecondPerech();
+	eg2.showThirdPerech();
+}
+
 void Perechen::showFirstPerech(){
 	std::cout << std::setfill('-') << std::setw(57) << '\n' <<
 		"|     Название процессора     | Количество компьютеров |\n" << 
@@ -197,13 +222,21 @@ void Perechen::saveThirdPerech(){
 }
 
 void makePerechen1(workComputers clWorkComp, Perechen& clPerech){
+	if (clWorkComp.size == 0){
+		std::cout << "Введите массив";
+		return;
+	}
 	std::set<std::string> UniqueNames;
 	for (int i = 0; i < clWorkComp.size; i++)
 		UniqueNames.insert(clWorkComp.CapabilitiesComp[i].CompInfo.ProcName);
 	int nomerMass = 0, counter = 1;
-	clPerech.pBrandlen = UniqueNames.size(); for (auto a : UniqueNames)
+	clPerech.pBrandlen = UniqueNames.size(); 
+	if (clPerech.perechenBrands != NULL)
+		delete [] clPerech.perechenBrands;
+	clPerech.perechenBrands = new BrandPerech[clPerech.pBrandlen];
+	for (auto a : UniqueNames)
 	{
-		clPerech.perechenBrands[nomerMass].ProcName= a;
+		clPerech.perechenBrands[nomerMass].ProcName = a;
 		for (int i = 0; i < clWorkComp.size; i++)
 			if (a == clWorkComp.CapabilitiesComp[i].CompInfo.ProcName)
 				clPerech.perechenBrands[nomerMass].Count = counter++;
@@ -213,11 +246,18 @@ void makePerechen1(workComputers clWorkComp, Perechen& clPerech){
 }
 
 void makePerechen2(workComputers clWorkComp, Perechen& clPerech){
+	if (clWorkComp.size == 0){
+		std::cout << "Введите массив";
+		return;
+	}
 	std::set<std::string> UniqueNames;
 	int nomerMass = 0, counter = 1;
 	for (int i = 0; i < clWorkComp.size; i++)
 		UniqueNames.insert(clWorkComp.CapabilitiesComp[i].CompInfo.ProcType);
 	clPerech.pProclen = UniqueNames.size();
+	if (clPerech.perechenProcTypes != NULL)
+		delete [] clPerech.perechenProcTypes;
+	clPerech.perechenProcTypes = new TypeProcPerech[clPerech.pProclen];
 	for (auto a : UniqueNames)
 	{
 		clPerech.perechenProcTypes[nomerMass].ProcType = a;
@@ -230,11 +270,18 @@ void makePerechen2(workComputers clWorkComp, Perechen& clPerech){
 }
 
 void makePerechen3(workComputers clWorkComp, Perechen& clPerech){
+	if (clWorkComp.size == 0){
+		std::cout << "Введите массив";
+		return;
+	}
 	std::set<double> VolumePer;
  	int nomerMass = 0, counter = 1;
 	for (int i = 0; i < clWorkComp.size; i++)
 		VolumePer.insert(clWorkComp.CapabilitiesComp[i].CompInfo.GraphicVolume);
 	clPerech.pVideolen = VolumePer.size();
+	if (clPerech.perechenVideocardVolume != NULL)
+		delete [] clPerech.perechenVideocardVolume;
+	clPerech.perechenVideocardVolume = new VideocardsPerech[clPerech.pVideolen];
 	for (auto a : VolumePer){
 		clPerech.perechenVideocardVolume[nomerMass].GraphicVolume = a;
 		for (int i = 0; i < clWorkComp.size; i++)
