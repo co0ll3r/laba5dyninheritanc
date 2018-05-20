@@ -5,8 +5,8 @@ void swap(SearchComp& first, SearchComp& second){
 	std::swap(first.SearchResult, second.SearchResult);
 }
 
-SearchComp::SearchComp(SearchComp& copy) : SearchComp(){
-	swap(*this, copy);
+SearchComp::SearchComp(const SearchComp& copy) : SearchComp(copy.size){
+	std::copy(copy.SearchResult, copy.SearchResult + size, SearchResult);
 }
 
 SearchComp& SearchComp::operator=(SearchComp copy){

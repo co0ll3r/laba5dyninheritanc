@@ -4,8 +4,9 @@ void swap(workComputers& first, workComputers& second){
 	std::swap(first.size, second.size);
 	std::swap(first.CapabilitiesComp, second.CapabilitiesComp);
 }
-workComputers::workComputers(workComputers& copy) : workComputers(){
-	swap(*this, copy);
+workComputers::workComputers(const workComputers& copy) : workComputers(copy.size){
+//		 size(copy.size), CapabilitiesComp(size ? new RECORD[size] : nullptr) {
+	std::copy(copy.CapabilitiesComp, copy.CapabilitiesComp + size, CapabilitiesComp);
 }
 
 workComputers& workComputers::operator=(workComputers copy){
@@ -37,7 +38,6 @@ void workComputers::testCopyConstructor(){
 	eg.InputFromFile();
 	eg.showInfo();
 	workComputers eg2(eg);
-	eg.workComputers::~workComputers();
 	std::cout << "первый массив удален\n";
 	eg2.showInfo();
 }

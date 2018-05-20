@@ -1,6 +1,7 @@
 #include "CompHeader.h"
 
 // Должно копироваться три перечня!
+//
 void swap(Perechen& first, Perechen& second){
 	std::swap(first.pBrandlen, second.pBrandlen);
 	std::swap(first.pProclen, second.pProclen);
@@ -10,8 +11,10 @@ void swap(Perechen& first, Perechen& second){
 	std::swap(first.perechenVideocardVolume, second.perechenVideocardVolume);
 }
 
-Perechen::Perechen(Perechen& copy) : Perechen(){
-	swap(*this, copy);	
+Perechen::Perechen(const Perechen& copy) : Perechen(copy.pBrandlen, copy.pProclen, copy.pVideolen)  {
+	std::copy(copy.perechenBrands, copy.perechenBrands + pBrandlen, perechenBrands);
+	std::copy(copy.perechenProcTypes, copy.perechenProcTypes + pProclen, perechenProcTypes);
+	std::copy(copy.perechenVideocardVolume, copy.perechenVideocardVolume + pVideolen, perechenVideocardVolume);
 }
 
 Perechen& Perechen::operator=(Perechen copy){
@@ -35,7 +38,10 @@ void Perechen::testCopyOperator(){
 		Perechen eg2;
 		std::cout << "введите второй массив:\n";
 		eg2.InputFromFile();
-		eg2.showInfo();
+		eg2.workComputers::showInfo();
+		makePerechen1(eg2, eg2);
+		makePerechen2(eg2, eg2);
+		makePerechen3(eg2, eg2);
 		eg = eg2;
 	}
 	std::cout << "очистка второго массива\n";
@@ -56,7 +62,7 @@ void Perechen::testCopyConstructor(){
 	eg.showSecondPerech();
 	eg.showThirdPerech();
 	Perechen eg2(eg);
-	eg.Perechen::~Perechen();
+	//eg.Perechen::~Perechen();
 	std::cout << "первый массив удален\n";
 	eg2.showFirstPerech();
 	eg2.showSecondPerech();
@@ -223,7 +229,7 @@ void Perechen::saveThirdPerech(){
 
 void makePerechen1(workComputers clWorkComp, Perechen& clPerech){
 	if (clWorkComp.size == 0){
-		std::cout << "Введите массив";
+		std::cout << "Ошибка при создании 1 перечня! Введите массив\n";
 		return;
 	}
 	std::set<std::string> UniqueNames;
@@ -247,7 +253,7 @@ void makePerechen1(workComputers clWorkComp, Perechen& clPerech){
 
 void makePerechen2(workComputers clWorkComp, Perechen& clPerech){
 	if (clWorkComp.size == 0){
-		std::cout << "Введите массив";
+		std::cout << "Ошибка при создании 2 перечня! Введите массив\n";
 		return;
 	}
 	std::set<std::string> UniqueNames;
@@ -271,7 +277,7 @@ void makePerechen2(workComputers clWorkComp, Perechen& clPerech){
 
 void makePerechen3(workComputers clWorkComp, Perechen& clPerech){
 	if (clWorkComp.size == 0){
-		std::cout << "Введите массив";
+		std::cout << "Ошибка при создании 3 перечня! Введите массив\n";
 		return;
 	}
 	std::set<double> VolumePer;

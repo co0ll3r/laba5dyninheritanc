@@ -47,7 +47,7 @@ class workComputers {
 		/*Constructors*/
 		workComputers(int size = 0) : size(size), CapabilitiesComp(size ? new RECORD[size] : nullptr) {}
 		~workComputers() { delete [] CapabilitiesComp; }
-		workComputers(workComputers&);
+		workComputers(const workComputers&);
 		workComputers& operator=(workComputers);
 		friend void swap(workComputers&, workComputers&);
 
@@ -78,7 +78,7 @@ class SearchComp : public workComputers{
 		// constructors
 		SearchComp(int size = 0) : size(size), SearchResult(size ? new RECORD[size] : nullptr) {}
 		~SearchComp(){ delete [] SearchResult; }
-		SearchComp(SearchComp&);
+		SearchComp(const SearchComp&);
 		SearchComp& operator=(SearchComp);
 		friend void swap(SearchComp&, SearchComp&);
 
@@ -104,7 +104,7 @@ class Perechen : public SearchComp{
 		/* Constructors */
 		Perechen(int sB = 0, int sP = 0, int sV = 0) : pBrandlen(sB), pProclen(sP), pVideolen(sV), perechenBrands(pBrandlen ? new BrandPerech[pBrandlen] : nullptr), perechenProcTypes(pProclen? new TypeProcPerech[pProclen] : nullptr), perechenVideocardVolume(pVideolen ? new VideocardsPerech[pVideolen] : nullptr) {}
 		~Perechen() { delete [] perechenBrands; delete [] perechenProcTypes; delete [] perechenVideocardVolume;}
-		Perechen(Perechen&); 
+		Perechen(const Perechen&); 
 		Perechen& operator=(Perechen); 
 		friend void swap(Perechen&, Perechen&);
 		
