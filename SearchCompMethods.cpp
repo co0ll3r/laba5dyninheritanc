@@ -94,6 +94,12 @@ void SearchComp::showInfo(){
 	}
 }
 
+void SearchComp::swapElementsInSearch(unsigned index){
+	RECORD temp = SearchResult[index];
+	SearchResult[index] = SearchResult[index - 1];
+	SearchResult[index - 1] = temp;
+}
+
 void SearchComp::SortProcTypeAndClock(){
 	std::cout << "Сортировка по типу процессора и частоте: \n";
 	unsigned n = size;
@@ -104,13 +110,13 @@ void SearchComp::SortProcTypeAndClock(){
 		{
 			if (SearchResult[i].CompInfo.ProcType.compare(SearchResult[i - 1].CompInfo.ProcType) < 0)
 			{
-				swapElementsInMassive(i);
+				swapElementsInSearch(i);
 				flag = true;
 			}
 			else if (SearchResult[i].CompInfo.ProcType.compare(SearchResult[i - 1].CompInfo.ProcType) == 0 &&
 				 SearchResult[i].CompInfo.ClockSpeed < SearchResult[i - 1].CompInfo.ClockSpeed)	
 			{
-				swapElementsInMassive(i);
+				swapElementsInSearch(i);
 				flag = true;
 			}
 		}
@@ -128,7 +134,7 @@ void SearchComp::SortRAM(){
 		for (unsigned i = 1; i < n; i++)
 		{
 			if (SearchResult[i - 1].CompInfo.RAM> SearchResult[i].CompInfo.RAM){
-				swapElementsInMassive(i);
+				swapElementsInSearch(i);
 				flag = true;
 			}
 		}

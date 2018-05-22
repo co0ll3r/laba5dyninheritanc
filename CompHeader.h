@@ -93,7 +93,7 @@ class SearchComp : public workComputers{
 		virtual void OutputInFile();
 		virtual void SortProcTypeAndClock();
 		virtual void showInfo();
-	//	virtual void swapElementsInMassive(unsigned);
+		void swapElementsInSearch(unsigned);
 	private:
 		int size;
 		RECORD* SearchResult;
