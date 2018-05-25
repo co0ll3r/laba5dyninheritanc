@@ -1,6 +1,6 @@
 #include "CompHeader.h"
 
-void GetMenu(Perechen& ExampleComputer, bool exitFlag){
+void GetMenu(Perechen& ExampleComputer, bool& exitFlag){
 	int SwitchChoose = 1;
 	std::cout << "\033c"; // clear terminal
 	//system("clear");
@@ -75,7 +75,7 @@ void GetMenu(Perechen& ExampleComputer, bool exitFlag){
 		case 27: ExampleComputer.SearchComp::testCopyOperator(); break;
 		case 28: ExampleComputer.Perechen::testCopyConstructor(); break;
 		case 29: ExampleComputer.Perechen::testCopyOperator(); break;
-		default: exitFlag =false;
+		default: exitFlag =false; break;
 	}
 	std::cout << "\nВведите 1 для повторного выбора пункта меню(без очистки экрана): ";
 	std::cin >> SwitchChoose; // 

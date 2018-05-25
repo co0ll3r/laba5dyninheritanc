@@ -22,53 +22,28 @@ Perechen& Perechen::operator=(Perechen copy){
 		swap(*this, copy);
 	return *this;
 }
-
 void Perechen::testCopyOperator(){
-	Perechen eg;
-	std::cout << "введите первый массив:\n";
-	eg.InputFromFile();
-	eg.workComputers::showInfo();
-	makePerechen1(eg, eg);
-	makePerechen2(eg, eg);
-	makePerechen3(eg, eg);
+	Perechen eg, eg2;
+	eg = *this;
 	eg.showFirstPerech();
 	eg.showSecondPerech();
 	eg.showThirdPerech();
-	if (true){
-		Perechen eg2;
-		std::cout << "введите второй массив:\n";
-		eg2.InputFromFile();
-		eg2.workComputers::showInfo();
-		makePerechen1(eg2, eg2);
-		makePerechen2(eg2, eg2);
-		makePerechen3(eg2, eg2);
-		eg = eg2;
-	}
-	std::cout << "очистка второго массива\n";
-	eg.showFirstPerech();
-	eg.showSecondPerech();
-	eg.showThirdPerech();
-}
+	eg2 = eg;
+	eg2.showFirstPerech();
+	eg2.showSecondPerech();
+	eg2.showThirdPerech();
 
+}
 void Perechen::testCopyConstructor(){
-	workComputers some;
-	Perechen eg;
-	std::cout << "введите первый массив:\n";
-	some.InputFromFile();
-	makePerechen1(some, eg);
-	makePerechen2(some, eg);
-	makePerechen3(some, eg);
+	Perechen eg(*this);
 	eg.showFirstPerech();
 	eg.showSecondPerech();
 	eg.showThirdPerech();
 	Perechen eg2(eg);
-	//eg.Perechen::~Perechen();
-	std::cout << "первый массив удален\n";
 	eg2.showFirstPerech();
 	eg2.showSecondPerech();
 	eg2.showThirdPerech();
 }
-
 void Perechen::showFirstPerech(){
 	std::cout << std::setfill('-') << std::setw(57) << '\n' <<
 		"|     Название процессора     | Количество компьютеров |\n" << 
